@@ -1,0 +1,215 @@
+﻿<Page x:Class="RedOct.View.OrderView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:RedOct.View"
+      xmlns:ovm="clr-namespace:RedOct.ViewModels"
+      mc:Ignorable="d" 
+      d:DesignHeight="480" d:DesignWidth="1000"
+      Title="OrderView">
+    <Page.DataContext>
+        <ovm:OrderViewModel/>
+    </Page.DataContext>
+    <Grid>
+        <TabControl TabStripPlacement="Left">
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock Text="Заказы"/>
+                    <!--<Label Content="Заказы" />-->
+                </TabItem.Header>
+                <TabItem.Content>
+                    <WrapPanel>
+                        <DataGrid ItemsSource="{Binding Orders}" SelectedItem="{Binding SelectedOrder}"  IsReadOnly="True" Height="350" Width="600" 
+                                  AutoGenerateColumns="False" HorizontalAlignment="Left" VerticalAlignment="Top">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="ID" Binding="{Binding Id}"/>
+                                <DataGridTextColumn Header="Продукт" Binding="{Binding ProductId}"/>
+                                <DataGridTextColumn Header="Количество" Binding="{Binding Amount}"/>
+                                <DataGridTextColumn Header="Сумма" Binding="{Binding Sum}"/>
+                                <DataGridTextColumn Header="Дата заказа" Binding="{Binding Date, StringFormat='dd.MM.yyyy'}" />
+                                <DataGridTextColumn Header="Статус заказа" Binding="{Binding Status}"/>
+                                <DataGridTextColumn Header="ФИО заказчика" Binding="{Binding CustomerName}"/>
+                                <DataGridTextColumn Header="Телефон заказчика" Binding="{Binding PhoneCustomer}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <StackPanel Width="263">
+                            <Label Content="ID:"  Width="150" Height="25"/>
+                            <Label Content="{Binding NewOrder.Id}"  Width="150" Height="25"/>
+                            <Label Content="Продукт:" Width="150" Height="25"/>
+                            <ComboBox ItemsSource="{Binding PrimaryKeysProduct}" Text="{Binding NewOrder.ProductId}"
+                                DisplayMemberPath="Id"
+                                SelectedItem="{Binding SelectedOrder, Mode=TwoWay}"  Width="150" Height="25"/>
+                            <Label Content="Количество:" Width="150" Height="25"/>
+                            <TextBox Text="{Binding NewOrder.Amount, UpdateSourceTrigger=PropertyChanged }" Width="150" Height="25"/>
+                            <!--<Label Content="Сумма:" Width="150" Height="25"/>
+                            <TextBox IsReadOnly="True" Text="{Binding NewOrder.Sum, Mode=OneWay}"  Width="150" Height="25"/>-->
+                            <Label Content="Дата заказа:" Width="150" Height="25"/>
+                            <DatePicker Text="{Binding NewOrder.Date}" Width="150" Height="25"/>
+                            <Label Content="Статус заказа:" Width="150" Height="25"/>
+                            <ComboBox Text="{Binding NewOrder.Status}"  Width="150" Height="25">
+                                <ComboBoxItem>
+                                    <TextBlock Text="Оформлен"/>
+                                </ComboBoxItem>
+                                <ComboBoxItem>
+                                    <TextBlock Text="Завершен"/>
+                                </ComboBoxItem>
+                                <ComboBoxItem>
+                                    <TextBlock Text="Отменен"/>
+                                </ComboBoxItem>
+                            </ComboBox>
+                            <Label Content="ФИО заказчика:" Width="150" Height="25"/>
+                            <TextBox Text="{Binding NewOrder.CustomerName}" Width="150" Height="25"/>
+                            <Label Content="Телефон заказчика:" Width="150" Height="25"/>
+                            <TextBox Text="{Binding NewOrder.PhoneCustomer}"  Width="150" Height="25"/>
+                            <Label Content="Скидка:" Width="150" Height="25"/>
+                            <WrapPanel HorizontalAlignment="Center">
+                                <TextBox IsReadOnly="True" x:Name="ValueTextBox" Height="25" Text="{Binding Value}" Width="150"/>
+                                <RepeatButton x:Name="IncreaseButton" Content="▲" HorizontalAlignment="Right"  Width="20" Command="{Binding IncreaseCommand}"/>
+                                <RepeatButton x:Name="DecreaseButton" Content="▼" HorizontalAlignment="Right"  Width="20" Command="{Binding DecreaseCommand}"/>
+                            </WrapPanel>
+                            
+                        </StackPanel>
+                        <WrapPanel >
+                            <Button Command="{Binding AddOrderCommand}" Width="100" Height="25" Margin="15" Content="Добавить"/>
+                            <Button Command="{Binding SaveOrderCommand}" 
+                        CommandParameter="{Binding SelectedOrder}" Width="100" Height="25" Margin="15" Content="Изменить"/>
+                            <Button Command="{Binding RemoveOrderCommand}" 
+                        CommandParameter="{Binding SelectedOrder}" Width="100" Height="25" Margin="15" Content="Удалить"/>
+                            <Button Command="{Binding RefreshCommand}" Width="100" Height="25" Margin="15" Content="Сбросить"/>
+                        </WrapPanel>
+                    </WrapPanel>
+                </TabItem.Content>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock Text="План производства" />
+                </TabItem.Header>
+                <TabItem.Content>
+                    <WrapPanel>
+                        <DataGrid ItemsSource="{Binding ProductionPlans}" SelectedItem="{Binding SelectedProductionPlane}" IsReadOnly="True" Height="350" Width="600" 
+                                  AutoGenerateColumns="False" HorizontalAlignment="Left" VerticalAlignment="Top">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="ID" Binding="{Binding Id}"/>
+                                <DataGridTextColumn Header="ФИО сотрудника" Binding="{Binding UserId}"/>
+                                <DataGridTextColumn Header="Продукция" Binding="{Binding ProductId}"/>
+                                <DataGridTextColumn Header="Количество" Binding="{Binding Amount}"/>
+                                <DataGridTextColumn Header="Срок выполнения" Binding="{Binding Date, StringFormat='dd.MM.yyyy'}"/>
+                                <DataGridTextColumn Header="Статус" Binding="{Binding Status}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <StackPanel Width="263">
+                            <Label Content="ID:"  Width="150" Height="25"/>
+                            <Label Content="{Binding NewProductionPlane.Id}"  Width="150" Height="25"/>
+                            <Label Content="ФИО сотрудника:" Width="150" Height="25"/>
+                            <ComboBox ItemsSource="{Binding PrimaryKeysUser}" Text="{Binding NewProductionPlane.UserId}"
+                                DisplayMemberPath="Id"
+                                SelectedValuePath="Id"
+                                SelectedItem="{Binding SelectedProductionPlane, Mode=TwoWay}"  Width="150" Height="25"/>
+                            <Label Content="Продкция:" Width="150" Height="25"/>
+                            <ComboBox ItemsSource="{Binding PrimaryKeysProduct}" Text="{Binding NewProductionPlane.ProductId}"
+                                DisplayMemberPath="Id"
+                                SelectedItem="{Binding SelectedProductionPlane, Mode=TwoWay}"  Width="150" Height="25"/>
+                            <Label Content="Количество:" Width="150" Height="25"/>
+                            <TextBox Text="{Binding NewProductionPlane.Amount}"  Width="150" Height="25"/>
+                            <Label Content="Срок выполнения:" Width="150" Height="25"/>
+                            <DatePicker Text="{Binding NewProductionPlane.Date}" Width="150" Height="25"/>
+                            <Label Content="Статус:" Width="150" Height="25"/>
+                            <ComboBox Text="{Binding NewProductionPlane.Status}"  Width="150" Height="25">
+                                <ComboBoxItem>
+                                    <TextBlock Text="Выполнить"/>
+                                </ComboBoxItem>
+                                <ComboBoxItem>
+                                    <TextBlock Text="Выполнен"/>
+                                </ComboBoxItem>
+                            </ComboBox>
+                        </StackPanel>
+                        <WrapPanel >
+                            <Button Command="{Binding AddProductionPlaneCommand}" Width="100" Height="25" Margin="15" Content="Добавить"/>
+                            <Button Command="{Binding SaveProductionPlaneCommand}" 
+                        CommandParameter="{Binding SelectedProductionPlane}" Width="100" Height="25" Margin="15" Content="Изменить"/>
+                            <Button Command="{Binding RemoveProductionPlaneCommand}" 
+                        CommandParameter="{Binding SelectedProductionPlane}" Width="100" Height="25" Margin="15" Content="Удалить"/>
+                            <Button Command="{Binding RefreshCommand}" Width="100" Height="25" Margin="15" Content="Сбросить"/>
+                        </WrapPanel>
+                    </WrapPanel>
+                </TabItem.Content>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock Text="Продукция"/>
+                </TabItem.Header>
+                <TabItem.Content>
+                    <StackPanel>
+                        <WrapPanel Margin="10">
+                            <Label Content="Продукция:" Width="76" Height="25"/>
+                            <TextBox Text="{Binding SearchName}" Width="120" Height="25"/>
+                            <Button Command="{Binding SearchProductCommand}" Margin="15,0,0,0" Content="Найти" Width="100" Height="25"/>
+                            <Button Command="{Binding ResetData}" Width="100" Height="25" Margin="15,0,0,0" Content="Сбросить"/>
+                        </WrapPanel>
+                        <WrapPanel>
+                        <ListBox ItemsSource="{Binding Products}" SelectedItem="{Binding SelectedProduct}" Height="350" Width="600">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel>
+                                        <WrapPanel>
+                                            <Label Content="Продукция:" />
+                                            <TextBlock Text="{Binding Id}"/>
+                                        </WrapPanel>
+                                        <WrapPanel>
+                                            <Label Content="Количество:" />
+                                            <TextBlock Text="{Binding Amout}" />
+                                        </WrapPanel>
+                                        <WrapPanel>
+                                            <Label Content="Цена за единицу:" />
+                                            <TextBlock Text="{Binding Price}"/>
+                                        </WrapPanel>
+                                        <WrapPanel>
+                                            <Label Content="Срок годности:" />
+                                            <TextBlock Text="{Binding Expiration}" />
+                                        </WrapPanel>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                        <StackPanel Width="263">
+                            <Label Content="Продукт:" Width="150" Height="25"/>
+                            <TextBox Text="{Binding NewProduct.Id}"  Width="150" Height="25"/>
+                            <Label Content="Количество:" Width="150" Height="25"/>
+                            <TextBox Text="{Binding NewProduct.Amout}" Width="150" Height="25"/>
+                            <Label Content="Цена за единицу:" Width="150" Height="25"/>
+                            <TextBox Text="{Binding NewProduct.Price}"  Width="150" Height="25"/>
+                            <Label Content="Срок годности:" Width="150" Height="25"/>
+                            <ComboBox Text="{Binding NewProduct.Expiration}" Width="150" Height="25">
+                                <ComboBoxItem>
+                                    <TextBlock Text="12 мес." />
+                                </ComboBoxItem>
+                                <ComboBoxItem>
+                                    <TextBlock Text="9 мес." />
+                                </ComboBoxItem>
+                                <ComboBoxItem>
+                                    <TextBlock Text="7 мес." />
+                                </ComboBoxItem>
+                                <ComboBoxItem>
+                                    <TextBlock Text="6 мес." />
+                                </ComboBoxItem>
+                                <ComboBoxItem>
+                                    <TextBlock Text="4 мес." />
+                                </ComboBoxItem>
+                            </ComboBox>
+                        </StackPanel>
+                        <WrapPanel >
+                            <Button Command="{Binding AddProductCommand}" Width="100" Height="25" Margin="15" Content="Добавить"/>
+                            <Button Command="{Binding SaveProductCommand}" 
+                        CommandParameter="{Binding SelectedProduct}" Width="100" Height="25" Margin="15" Content="Изменить"/>
+                            <Button Command="{Binding RemoveProductCommand}"
+                        CommandParameter="{Binding SelectedProduct}" Width="100" Height="25" Margin="15" Content="Удалить"/>
+                            <Button Command="{Binding RefreshCommand}" Width="100" Height="25" Margin="15" Content="Сбросить"/>
+                        </WrapPanel>
+                    </WrapPanel>
+                    </StackPanel>
+                </TabItem.Content>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Page>

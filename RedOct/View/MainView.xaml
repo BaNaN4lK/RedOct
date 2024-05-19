@@ -1,0 +1,41 @@
+﻿<Window x:Class="RedOct.View.MainView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:mvm="clr-namespace:RedOct.ViewModels"
+        xmlns:cmd="clr-namespace:RedOct.Infrastructure"
+        xmlns:local="clr-namespace:RedOct.View"
+        mc:Ignorable="d"
+        Title="Красный Октябрь" Height="650" Width="1050">
+    <Window.DataContext>
+        <mvm:MainWindowViewModel/>
+    </Window.DataContext>
+    <Window.Resources>
+        <cmd:CloseApplicationCommand x:Key="CloseApplicationCommand"/>
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="43*"/>
+            <ColumnDefinition Width="1007*"/>
+        </Grid.ColumnDefinitions>
+        <DockPanel Grid.ColumnSpan="2">
+            <Menu DockPanel.Dock="Top">
+                <MenuItem Header="Файл">
+                    <MenuItem Header="Выход">
+                        <MenuItem.Command>
+                            <cmd:CloseApplicationCommand/>
+                        </MenuItem.Command>
+                    </MenuItem>
+                </MenuItem>
+            </Menu>
+            <!--<StatusBar DockPanel.Dock="Bottom">
+                <StatusBarItem>
+                    <TextBox Width="200" Text="{Binding CurrentUser}"/>
+                </StatusBarItem>
+            </StatusBar>-->
+            <Frame DockPanel.Dock="Top" ContentRendered="MainFrame_ContentRender" NavigationUIVisibility="Hidden" Name="MainFrame"></Frame>
+            <Button Height="30" Width="100" Name="BatonBack" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,10,100,25" Click="Button_Click">Назад</Button>
+        </DockPanel>
+    </Grid>
+</Window>

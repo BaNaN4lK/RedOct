@@ -1,0 +1,280 @@
+﻿<Page x:Class="RedOct.View.ConfectionerView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:cvm="clr-namespace:RedOct.ViewModels"
+      xmlns:local="clr-namespace:RedOct.View"
+      xmlns:fa5="http://schemas.fontawesome.com/icons/"
+      mc:Ignorable="d" 
+      d:DesignHeight="480" d:DesignWidth="1000"
+      Title="ConfectionerView">
+    <Page.DataContext>
+        <cvm:ConfectionerViewModel/>
+    </Page.DataContext>
+    <Grid>
+        <TabControl TabStripPlacement="Left">
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock Text="Сырье"/>
+                </TabItem.Header>
+                <TabItem.Content>
+                    <StackPanel>
+                        <WrapPanel Margin="10">
+                            <Label Content="Материал:" Width="70" Height="25"/>
+                            <TextBox Text="{Binding SearchName}" Width="120" Height="25"/>
+                            <Button Command="{Binding SearchProductCommand}" Margin="15,0,0,0" Content="Найти" Width="100" Height="25"/>
+                            <Button Command="{Binding ResetData}" Width="100" Height="25" Margin="15,0,0,0" Content="Сбросить"/>
+                        </WrapPanel>
+                        <WrapPanel>
+                        <ListBox ItemsSource="{Binding Materials}" SelectedItem="{Binding SelectedMaterial}" Height="350" Width="580" 
+                                    HorizontalAlignment="Left" VerticalAlignment="Top">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel>
+                                        <WrapPanel>
+                                            <Label Content="Сырье:" />
+                                            <TextBlock Text="{Binding Id}"/>
+                                        </WrapPanel>
+                                        <WrapPanel>
+                                            <Label Content="Количество:" />
+                                            <TextBlock Text="{Binding Amount}" />
+                                        </WrapPanel>
+                                        <WrapPanel>
+                                            <Label Content="Единица измерения:" />
+                                            <TextBlock Text="{Binding Unit}"/>
+                                        </WrapPanel>
+                                        <WrapPanel>
+                                            <Label Content="Дата учета:" />
+                                            <TextBlock Text="{Binding Date, StringFormat='dd.MM.yyyy'}" />
+                                        </WrapPanel>
+                                        <WrapPanel>
+                                            <Label Content="Цена за единицу:" />
+                                            <TextBlock Text="{Binding UnitPrice}" />
+                                        </WrapPanel>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                        <StackPanel Width="263">
+                            <Label Content="Сырье:"  Width="150" Height="25"/>
+                            <TextBox Text="{Binding NewMaterial.Id}"  Width="150" Height="25"/>
+                            <Label Content="Количество:" Width="150" Height="25"/>
+                            <TextBox Text="{Binding NewMaterial.Amount }" Width="150" Height="25"/>
+                            <Label Content="Единица измерения:" Width="150" Height="25"/>
+                            <ComboBox Text="{Binding NewMaterial.Unit}"   Width="150" Height="25">
+                                <ComboBoxItem>
+                                    <TextBlock Text="Кг"/>
+                                </ComboBoxItem>
+                                <ComboBoxItem>
+                                    <TextBlock Text="г"/>
+                                </ComboBoxItem>
+                                <ComboBoxItem>
+                                    <TextBlock Text="л"/>
+                                </ComboBoxItem>
+                                <ComboBoxItem>
+                                    <TextBlock Text="мл"/>
+                                </ComboBoxItem>
+                            </ComboBox>
+                            <Label Content="Дата Учета:" Width="150" Height="25"/>
+                            <DatePicker Text="{Binding NewMaterial.Date}" Width="150" Height="25"/>
+                            <Label Content="Цена за единицу:" Width="150" Height="25"/>
+                            <TextBox Text="{Binding NewMaterial.UnitPrice}" Width="150" Height="25"/>
+                            <Button Command="{Binding RefreshCommand}" HorizontalAlignment="Right" Width="25" Height="25" Margin="15" fa5:Awesome.Content="Solid_Sync" />
+                        </StackPanel>
+                        <WrapPanel >
+                            <Button Command="{Binding AddMaterialCommand}" Width="100" Height="25" Margin="15" Content="Добавить"/>
+                            <Button Command="{Binding SaveMaterialCommand}" 
+                        CommandParameter="{Binding SelectedMaterial}" Width="100" Height="25" Margin="15" Content="Изменить"/>
+                            <Button Command="{Binding RemoveMaterialCommand}" 
+                        CommandParameter="{Binding SelectedMaterial}" Width="100" Height="25" Margin="15" Content="Удалить"/>
+                        </WrapPanel>
+                    </WrapPanel>
+                    </StackPanel>
+                </TabItem.Content>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock Text="План производства" />
+                </TabItem.Header>
+                <TabItem.Content>
+                    <WrapPanel>
+                        <DataGrid ItemsSource="{Binding ProductionPlans}" 
+                                  SelectedItem="{Binding SelectedProductionPlane}" IsReadOnly="True" Height="350" Width="580" 
+                                  AutoGenerateColumns="False" HorizontalAlignment="Left" VerticalAlignment="Center">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="ID" Binding="{Binding Id}"/>
+                                <DataGridTextColumn Header="ФИО сотрудника" Binding="{Binding UserId}"/>
+                                <DataGridTextColumn Header="Продукция" Binding="{Binding ProductId}"/>
+                                <DataGridTextColumn Header="Количество" Binding="{Binding Amount}"/>
+                                <DataGridTextColumn Header="Срок выполнения" Binding="{Binding Date, StringFormat='dd.MM.yyyy'}"/>
+                                <DataGridTextColumn Header="Статус" Binding="{Binding Status}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <StackPanel Width="263">
+                            <Label Content="ID:"  Width="150" Height="25"/>
+                            <Label Content="{Binding NewProductionPlane.Id}"  Width="150" Height="25"/>
+                            <Label Content="ФИО сотрудника:" Width="150" Height="25"/>
+                            <ComboBox ItemsSource="{Binding PrimaryKeysUser}" Text="{Binding NewProductionPlane.UserId}"
+                                DisplayMemberPath="Id"
+                                SelectedValuePath="Id"
+                                SelectedItem="{Binding SelectedProductionPlane, Mode=TwoWay}"  Width="150" Height="25"/>
+                            <Label Content="Продкция:" Width="150" Height="25"/>
+                            <ComboBox ItemsSource="{Binding PrimaryKeysProduct}" Text="{Binding NewProductionPlane.ProductId}"
+                                DisplayMemberPath="Id"
+                                SelectedItem="{Binding SelectedProductionPlane, Mode=TwoWay}"  Width="150" Height="25"/>
+                            <Label Content="Количество:" Width="150" Height="25"/>
+                            <TextBox Text="{Binding NewProductionPlane.Amount}"  Width="150" Height="25"/>
+                            <Label Content="Срок выполнения:" Width="150" Height="25"/>
+                            <DatePicker Text="{Binding NewProductionPlane.Date}" Width="150" Height="25"/>
+                            <Label Content="Статус:" Width="150" Height="25"/>
+                            <ComboBox Text="{Binding NewProductionPlane.Status}"  Width="150" Height="25">
+                                <ComboBoxItem>
+                                    <TextBlock Text="Выполнить"/>
+                                </ComboBoxItem>
+                                <ComboBoxItem>
+                                    <TextBlock Text="Выполнен"/>
+                                </ComboBoxItem>
+                            </ComboBox>
+                            <Button Command="{Binding RefreshCommand}" HorizontalAlignment="Right" Width="25" Height="25" Margin="15" fa5:Awesome.Content="Solid_Sync" />
+                        </StackPanel>
+                        <WrapPanel >
+                            <Button Command="{Binding AddProductionPlaneCommand}" Width="100" Height="25" Margin="15" Content="Добавить"/>
+                            <Button Command="{Binding SaveProductionPlaneCommand}" 
+                        CommandParameter="{Binding SelectedProductionPlane}" Width="100" Height="25" Margin="15" Content="Изменить"/>
+                            <Button Command="{Binding RemoveProductionPlaneCommand}" 
+                        CommandParameter="{Binding SelectedProductionPlane}" Width="100" Height="25" Margin="15" Content="Удалить"/>
+                        </WrapPanel>
+                    </WrapPanel>
+                </TabItem.Content>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock Text="Поставщик"/>
+                </TabItem.Header>
+                <TabItem.Content>
+                    <WrapPanel>
+                        <DataGrid ItemsSource="{Binding Providers}" SelectedItem="{Binding SelectedProviders}"  IsReadOnly="True" Height="350" Width="580" 
+                                  AutoGenerateColumns="False" HorizontalAlignment="Left" VerticalAlignment="Top">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn  Header="Поставщик" Binding="{Binding Id}"/>
+                                <DataGridTextColumn  Header="Номер телефона" Binding="{Binding Phone}"/>
+                                <DataGridTextColumn  Header="Эл.Почта" Binding="{Binding Email}"/>
+                                <DataGridTextColumn  Header="Город" Binding="{Binding City}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <StackPanel Width="263">
+                            <Label Content="Поставщик:"  Width="150" Height="25"/>
+                            <TextBox Text="{Binding NewProvider.Id}"  Width="150" Height="25"/>
+                            <Label Content="Номер телефона:" Width="150" Height="25"/>
+                            <TextBox Text="{Binding NewProvider.Phone}" Width="150" Height="25"/>
+                            <Label Content="Эл. Почта:" Width="150" Height="25"/>
+                            <TextBox Text="{Binding NewProvider.Email }" Width="150" Height="25"/>
+                            <Label Content="Город:" Width="150" Height="25"/>
+                            <TextBox Text="{Binding NewProvider.City}" Width="150" Height="25"/>
+                            <Button Command="{Binding RefreshCommand}" HorizontalAlignment="Right" Width="25" Height="25" Margin="15" fa5:Awesome.Content="Solid_Sync" />
+                        </StackPanel>
+                        <WrapPanel >
+                            <Button Command="{Binding AddProviderCommand}" Width="100" Height="25" Margin="15" Content="Добавить"/>
+                            <Button Command="{Binding SaveProviderCommand}" 
+                        CommandParameter="{Binding SelectedProviders}" Width="100" Height="25" Margin="15" Content="Изменить"/>
+                            <Button Command="{Binding RemoveProviderCommand}" 
+                        CommandParameter="{Binding SelectedProviders}" Width="100" Height="25" Margin="15" Content="Удалить"/>
+                        </WrapPanel>
+                    </WrapPanel>
+                </TabItem.Content>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock Text="Заявка на закупку сырья"/>
+                </TabItem.Header>
+                <TabItem.Content>
+                    <WrapPanel>
+                        <DataGrid ItemsSource="{Binding PurchaseMaterials}" SelectedItem="{Binding SelectedPurchaseMaterial}"  IsReadOnly="True" Height="350" Width="580" 
+                                  AutoGenerateColumns="False" HorizontalAlignment="Left" VerticalAlignment="Top">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn  Header="Id" Binding="{Binding Id}"/>
+                                <DataGridTextColumn  Header="Сырье" Binding="{Binding MaterialId}"/>
+                                <DataGridTextColumn  Header="Дата создания" Binding="{Binding DateCreate}"/>
+                                <DataGridTextColumn  Header="Количество" Binding="{Binding Amount}"/>
+                                <DataGridTextColumn  Header="Единица измерения" Binding="{Binding Unit}"/>
+                                <DataGridTextColumn  Header="Статус" Binding="{Binding Status}"/>
+                                <DataGridTextColumn  Header="Сумма" Binding="{Binding Price}"/>
+                                <DataGridTextColumn  Header="Поставщик" Binding="{Binding ProviderId}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <StackPanel Width="263">
+                            <Label Content="ID:"  Width="150" Height="25"/>
+                            <Label Content="{Binding NewPurchaseMaterial.Id}"  Width="150" Height="25"/>
+                            <Label Content="Сырье:" Width="150" Height="25"/>
+                            <ComboBox ItemsSource="{Binding PrimaryKeysMaterial}" Text="{Binding NewPurchaseMaterial.MaterialId}"
+                                DisplayMemberPath="Id"
+                                SelectedItem="{Binding SelectedProductionPlane, Mode=TwoWay}" Width="150" Height="25"/>
+                            <Label Content="Дата создания:" Width="150" Height="25"/>
+                            <DatePicker Text="{Binding NewPurchaseMaterial.DateCreate}" Width="150" Height="25"/>
+                            <Label Content="Количество:" Width="150" Height="25"/>
+                            <TextBox Text="{Binding NewPurchaseMaterial.Amount}" Width="150" Height="25"/>
+                            <Label Content="Единица измерения:" Width="150" Height="25"/>
+                            <ComboBox Text="{Binding NewPurchaseMaterial.Unit}" Width="150" Height="25">
+                                <ComboBoxItem>
+                                    <TextBlock Text="Кг"/>
+                                </ComboBoxItem>
+                                <ComboBoxItem>
+                                    <TextBlock Text="г"/>
+                                </ComboBoxItem>
+                                <ComboBoxItem>
+                                    <TextBlock Text="л"/>
+                                </ComboBoxItem>
+                                <ComboBoxItem>
+                                    <TextBlock Text="мл"/>
+                                </ComboBoxItem>
+                            </ComboBox>
+                            <Label Content="Статус:" Width="150" Height="25"/>
+                            <ComboBox Text="{Binding NewPurchaseMaterial.Status}" Width="150" Height="25">
+                                <ComboBoxItem>
+                                    <TextBlock Text="Закупить"/>
+                                </ComboBoxItem>
+                                <ComboBoxItem>
+                                    <TextBlock Text="Закуплено"/>
+                                </ComboBoxItem>
+                                <ComboBoxItem>
+                                    <TextBlock Text="Поставлено"/>
+                                </ComboBoxItem>
+                            </ComboBox>
+                            <!--<Label Content="Сумма:" Width="150" Height="25"/>
+                            <TextBox Text="{Binding NewPurchaseMaterial.Price}" Width="150" Height="25"/>-->
+                            <Label Content="Поставщик:" Width="150" Height="25"/>
+                            <ComboBox ItemsSource="{Binding PrimaryKeysProvider}" Text="{Binding NewPurchaseMaterial.ProviderId}"
+                                DisplayMemberPath="Id"
+                                SelectedItem="{Binding SelectedProductionPlane, Mode=TwoWay}" Width="150" Height="25"/>
+                            <!--<ComboBox ItemsSource="{Binding PrimaryKeysProduct}" Text="{Binding NewOrder.ProductId}"
+                                DisplayMemberPath="Id"
+                                SelectedItem="{Binding SelectedOrder, Mode=TwoWay}"  Width="150" Height="25"/>
+                            <TextBox Text="{Binding NewOrder.Amount, UpdateSourceTrigger=PropertyChanged }" Width="150" Height="25"/>
+                            <DatePicker Text="{Binding NewOrder.Date}" Width="150" Height="25"/>
+                            <ComboBox Text="{Binding NewOrder.Status}"  Width="150" Height="25">
+                                <ComboBoxItem>
+                                    <TextBlock Text="Оформлен"/>
+                                </ComboBoxItem>
+                                <ComboBoxItem>
+                                    <TextBlock Text="Завершен"/>
+                                </ComboBoxItem>
+                                <ComboBoxItem>
+                                    <TextBlock Text="Отменен"/>
+                                </ComboBoxItem>
+                            </ComboBox>-->
+                            <Button Command="{Binding RefreshCommand}" HorizontalAlignment="Right" Width="25" Height="25" Margin="15" fa5:Awesome.Content="Solid_Sync" />
+                        </StackPanel>
+                        <WrapPanel >
+                            <Button Command="{Binding AddPurchaseMaterialCommand}" Width="100" Height="25" Margin="15" Content="Добавить"/>
+                            <Button Command="{Binding SavePurchaseMaterialCommand}" 
+                        CommandParameter="{Binding SelectedPurchaseMaterial}" Width="100" Height="25" Margin="15" Content="Изменить"/>
+                            <Button Command="{Binding RemovePurchaseMaterialCommand}" 
+                        CommandParameter="{Binding SelectedPurchaseMaterial}" Width="100" Height="25" Margin="15" Content="Удалить"/>
+                        </WrapPanel>
+                    </WrapPanel>
+                </TabItem.Content>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Page>
